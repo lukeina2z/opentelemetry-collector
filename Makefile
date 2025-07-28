@@ -154,6 +154,14 @@ endif
 otelcorecol:
 	pushd cmd/otelcorecol && CGO_ENABLED=0 $(GOCMD) build -trimpath -o ../../bin/otelcorecol_$(GOOS)_$(GOARCH) -tags "grpcnotrace" ./... && popd
 
+
+.PHONY: otelcorecol-win-dbg
+otelcorecol-win-dbg:
+	pushd cmd/otelcorecol && CGO_ENABLED=0 $(GOCMD) build -gcflags="all=-N -l"   -o ../../bin/otelcorecol_$(GOOS)_$(GOARCH)-dbg.exe \
+		-tags $(GO_BUILD_TAGS) ./cmd/otelcorecol && popd
+
+
+
 .PHONY: genotelcorecol
 genotelcorecol: install-tools
 	pushd cmd/builder/ && $(GOCMD) run ./ --skip-compilation --config ../otelcorecol/builder-config.yaml --output-path ../otelcorecol && popd
