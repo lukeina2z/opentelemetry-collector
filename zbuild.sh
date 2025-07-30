@@ -4,6 +4,8 @@ set -e
 set -x
 
 
-make otelcorecol
+# make otelcorecol
 
-make otelcorecol-win-dbg
+make otelcorecol-mac-dbg
+
+# make otelcorecol-win-dbg

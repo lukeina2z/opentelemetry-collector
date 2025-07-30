@@ -5,27 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            // sudo /home/ab/go/bin/dlv attach 26788 --headless --listen=:2345 --api-version=2 --accept-multiclient
-            "name": "remote dlv server",
-            "type": "go",
-            "request": "attach",
-            "mode": "remote",
-            "debugAdapter": "dlv-dap",
-            "remotePath": "${workspaceFolder}/build/xray/xray",
-            "cwd": "${workspaceFolder}",
-            "port": 2345,
-            "host": "localhost",
-            "apiVersion": 2,
-            "substitutePath": [],
-            "showLog": true
-        },
-        {
-            // https://github.com/aws-observability/aws-otel-collector/tree/main/docs/developers
-            // https://aws-otel.github.io/docs/getting-started/collector
-            // https://aws-otel.github.io/docs/getting-started/remote-sampling
-            // make awscollector
-            // go mod download github.com/open-telemetry/opentelemetry-collector-contrib@v0.117.0
-            // ls ~/go/pkg/mod/github.com/open-telemetry/opentelemetry-collector-contrib@v0.117.0
             "name": "Launch otel-col",
             "type": "go",
             "request": "launch",
@@ -37,24 +16,30 @@
             "linux": {
                 // "program": "${workspaceFolder}/build/xray/xray"
             },
+            "osx": {
+                "program": "${workspaceFolder}/bin/otelcorecol_darwin_arm64-dbg",
+            },
             "windows": {
                 "program": "${workspaceFolder}/bin/otelcorecol_windows_amd64-dbg.exe",
-                "args": [
-                    "--config",
-                    "${workspaceFolder}/zconfig.yaml"
-                ],
-                "substitutePath": [
-                    {
-                        "from": "${workspaceFolder}/cmd/otelcorecol",
-                        "to": "go.opentelemetry.io/collector/cmd/otelcorecol"
-                    },
-                    {
-                        "from": "${workspaceFolder}/otelcol",
-                        "to": "go.opentelemetry.io/collector/otelcol"
-                    },
-                ]
+                // "args": [
+                //     "--config",
+                //     "${workspaceFolder}/zconfig.yaml"
+                // ],
+                // "substitutePath": [
+                //     {
+                //         "from": "${workspaceFolder}/cmd/otelcorecol",
+                //         "to": "go.opentelemetry.io/collector/cmd/otelcorecol"
+                //     },
+                //     {
+                //         "from": "${workspaceFolder}/otelcol",
+                //         "to": "go.opentelemetry.io/collector/otelcol"
+                //     },
+                // ]
             },
-            "program": "${workspaceFolder}/bin/otelcorecol",
+            "args": [
+                "--config",
+                "${workspaceFolder}/zconfig.yaml"
+            ],
             "env": {
                 "AWS_REGION": "us-west-2",
             },
@@ -68,34 +53,29 @@
             ],
             "substitutePath": [
                 {
-                    "from": "${workspaceFolder}/otelcol/command.go",
-                    "to": "go.opentelemetry.io/collector/otelcol/command.go"
+                    "from": "${workspaceFolder}/cmd/otelcorecol",
+                    "to": "${workspaceFolder}/cmd/otelcorecol"
                 },
                 {
-                    "from": "${workspaceFolder}/cmd/awscollector/main.go",
-                    "to": "github.com/aws-observability/aws-otel-collector/cmd/awscollector/main.go"
-                },
-                {
-                    "from": "${workspaceFolder}/vendor/github.com/open-telemetry/opentelemetry-collector-contrib/internal/aws/proxy",
-                    "to": "github.com/open-telemetry/opentelemetry-collector-contrib/internal/aws/proxy@v0.117.0"
-                },
-                {
-                    "from": "${workspaceFolder}/vendor/github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsxrayreceiver",
-                    "to": "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/awsxrayreceiver@v0.117.0"
-                },
-                {
-                    "from": "${workspaceFolder}",
-                    "to": "github.com/aws-observability/aws-otel-collector"
-                },
-                {
-                    "from": "/Users/lukezha/go/pkg/mod/github.com",
-                    "to": "github.com/"
-                },
-                {
-                    "from": "/Users/lukezha/go/pkg/mod/go.opentelemetry.io",
-                    "to": "go.opentelemetry.io/"
+                    "from": "${workspaceFolder}/otelcol",
+                    "to": "${workspaceFolder}/otelcol"
                 }
             ]
+        },
+        {
+            // sudo /home/ab/go/bin/dlv attach 26788 --headless --listen=:2345 --api-version=2 --accept-multiclient
+            "name": "remote dlv server",
+            "type": "go",
+            "request": "attach",
+            "mode": "remote",
+            "debugAdapter": "dlv-dap",
+            "remotePath": "${workspaceFolder}/build/xray/xray",
+            "cwd": "${workspaceFolder}",
+            "port": 2345,
+            "host": "localhost",
+            "apiVersion": 2,
+            "substitutePath": [],
+            "showLog": true
         }
     ]
 }
