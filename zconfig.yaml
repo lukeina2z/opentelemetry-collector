@@ -1,0 +1,36 @@
+receivers:
+  otlp: # the OTLP receiver the app is sending traces to
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+
+exporters:
+  debug:
+    verbosity: detailed  # Options: normal, detailed, or basic
+  otlp/jaeger: # Jaeger supports OTLP directly
+    endpoint: http://<Server>:4317
+    tls:
+      insecure: true
+
+service:
+  telemetry:
+    logs:
+      level: "debug"  # debug, info, warn, error
+  pipelines:
+    traces/dev:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/jaeger, debug]
+  # traces:
+  #     receivers: [otlp]
+  #     exporters: [debug]
+  # metrics:
+  #     receivers: [otlp]
+  #     exporters: [debug]
+  # logs:
+  #     receivers: [otlp]
+  #     exporters: [debug]
+
